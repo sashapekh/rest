@@ -22,7 +22,6 @@ class UserController
 
     public function findById(Request $request): Response
     {
-
         return (new Response())->json($this->userRepository->find(1) ?? []);
     }
 }

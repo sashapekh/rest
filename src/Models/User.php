@@ -10,13 +10,16 @@ class User
     public string $address;
     public string $email;
 
-    public function __construct(int $id, string $name, string $email, int $age, string $address)
+    private $password;
+
+    public function __construct(int $id, string $name, string $email, int $age, string $address, string $password)
     {
         $this->id = $id;
         $this->name = $name;
         $this->age = $age;
         $this->address = $address;
         $this->email = $email;
+        $this->password = $password;
     }
 
     public function toArray(): array
@@ -28,5 +31,13 @@ class User
             'address' => $this->address,
             'email'   => $this->email
         ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getPassword(): string
+    {
+        return $this->password;
     }
 }

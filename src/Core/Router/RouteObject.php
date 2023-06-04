@@ -92,7 +92,7 @@ class RouteObject
                     // here we can create object with position and key properties for the better useful
                     $this->dynamicSegments[] = [
                         "position" => $index,
-                        "key" => preg_replace('/\{|\}/', '', $value)
+                        "key"      => preg_replace('/\{|\}/', '', $value)
                     ];
                 }
             }
@@ -105,5 +105,10 @@ class RouteObject
     public function getDynamicSegments(): ?array
     {
         return $this->dynamicSegments;
+    }
+
+    public function getMiddlewares(): array
+    {
+        return $this->middlewares;
     }
 }

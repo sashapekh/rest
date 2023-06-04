@@ -21,10 +21,8 @@ class App
     private ServerRequestInterface $serverRequest;
 
 
-
     public function __construct()
     {
-
         $this->uri = new Uri();
         $this->request = new Request();
         $this->currentRoute = RouteResolver::make(
@@ -38,35 +36,44 @@ class App
     public function run()
     {
         $this->noResolvedRouteCheck();
-        $class =  $this->currentRoute->getControllerClass();
-        $method =  $this->currentRoute->getControllerMethod();
+        $class = $this->currentRoute->getControllerClass();
+        $method = $this->currentRoute->getControllerMethod();
+
+        $this->middlewareHandle();
 
         $response = (new $class)->{$method}(
             $this->request
         );
         $this->resolveResponse($response);
     }
+
     private function resolveResponse(Response $response)
     {
         http_response_code($response->getStatusCode());
-        if ($response->isJson())
-        {
+        if ($response->isJson()) {
             echo json_encode($response->getJsonData());
             exit();
         }
     }
+
     private function noResolvedRouteCheck(): void
     {
-
         if (empty($this->currentRoute)) {
             http_response_code(404);
             if ($this->request->isJson()) {
-                echo json_encode(['code' => 404, 'message'  => HttpHelper::getPhraseByStatusCode(404)]);
+                echo json_encode(['code' => 404, 'message' => HttpHelper::getPhraseByStatusCode(404)]);
                 exit();
             } else {
                 echo sprintf("<h1>%s</h1>", HttpHelper::getPhraseByStatusCode(404));
                 exit();
             }
-       }
+        }
+    }
+
+    private function middlewareHandle()
+    {
+        if (!empty($this->currentRoute->getMiddlewares())) {
+            dd($this->currentRoute->getMiddlewares());
+        }
     }
 }

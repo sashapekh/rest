@@ -19,6 +19,7 @@ class Request implements RequestInterface
     private $body = null;
 
     private string $method;
+
     public function __construct()
     {
         $this->protocolVersion = preg_replace('/[^0-9.]/', '', $_SERVER['SERVER_PROTOCOL']);
@@ -96,4 +97,14 @@ class Request implements RequestInterface
         $new->uri = $uri;
         return $new;
     }
+
+    public function getFormData(): array
+    {
+        try {
+            return json_decode(file_get_contents("php://input"), true) ?? [];
+        } catch (\Exception $exception) {
+            return [];
+        }
+    }
+
 }
