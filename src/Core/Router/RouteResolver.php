@@ -2,7 +2,8 @@
 
 namespace Sashapekh\SimpleRest\Core\Router;
 
-use Sashapekh\SimpleRest\Core\Request\RequestHelper;
+use Sashapekh\SimpleRest\Core\Request\Request;
+use Sashapekh\SimpleRest\Core\Uri\Uri;
 
 
 class RouteResolver
@@ -12,13 +13,13 @@ class RouteResolver
      * @param array<RouteObject> $routeList
      * @return RouteObject|null
      */
-    public static function make(array $routeList): ?RouteObject
+    public static function make(array $routeList, Uri $uri, Request $request): ?RouteObject
     {
         // dump selection
         $filterRouteList = array_values(
-            array_filter($routeList, function (RouteObject $routeObject) {
-                return RequestHelper::getRequestUri() === $routeObject->getRoute()
-                    && RequestHelper::getRequestMethod() === $routeObject->getHttpMethod();
+            array_filter($routeList, function (RouteObject $routeObject) use ($uri, $request) {
+                return $uri->getPath() === $routeObject->getRoute()
+                    && $request->getMethod() === $routeObject->getHttpMethod();
             })
         );
 
@@ -26,22 +27,22 @@ class RouteResolver
             return $filterRouteList[0];
         }
         // can be dynamic route
-        $requestSegments = parseSegment(RequestHelper::getRequestUri());
-
+        $requestSegments = parseSegment($uri->getPath());
         $filterDynamicSegment = array_filter($routeList, function (RouteObject $routeObject) use ($requestSegments) {
             if (empty($routeObject->getDynamicSegments())) {
                 return false;
             }
-
             $buildUrl = null;
+
             foreach ($requestSegments as $key => $value) {
+
                 if (isset($routeObject->getUriSegments()[$key])) {
                     if ($routeObject->getUriSegments()[$key] === $value) {
                         $buildUrl .= '/' . $value;
                     }
 
-                    if (isset($routeObject->getDynamicSegments()[$key])) {
-                        $buildUrl .= '/' . $routeObject->getDynamicSegments()[$key];
+                    if (isset($routeObject->getDynamicSegments()[$key]['key'])) {
+                        $buildUrl .= sprintf('/{%s}', $routeObject->getDynamicSegments()[$key]['key']);
                     }
                 }
             }

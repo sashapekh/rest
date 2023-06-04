@@ -1,21 +1,19 @@
 <?php
 
-
-use JetBrains\PhpStorm\NoReturn;
-
-#[NoReturn] function dd($variable)
+// simple method to display pretty variable
+function dd($variable)
 {
     echo '<pre>' . var_export($variable, true) . '</pre>';
     exit();
 }
 
-
-function parseSegment(string $url): ?array
+// parse url string to array
+function parseSegment(string $uri): ?array
 {
-    $list = explode('/', $url);
+    $list = explode('/', $uri);
 
     $list = array_filter($list, function ($item) {
         return !empty($item);
     });
-    return empty($list) ? null : $list;
+    return empty($list) ? null : array_values($list);
 }

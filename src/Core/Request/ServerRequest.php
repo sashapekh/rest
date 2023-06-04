@@ -7,6 +7,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
 use Sashapekh\SimpleRest\Core\HttpHelper;
 use Sashapekh\SimpleRest\Core\MessageTrait;
+use Sashapekh\SimpleRest\Core\Router\RouteObject;
 use Sashapekh\SimpleRest\Core\Uri\Uri;
 
 class ServerRequest implements ServerRequestInterface

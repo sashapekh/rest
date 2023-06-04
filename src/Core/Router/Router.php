@@ -2,6 +2,8 @@
 
 namespace Sashapekh\SimpleRest\Core\Router;
 
+use Sashapekh\SimpleRest\Core\HttpHelper;
+
 class Router
 {
     /** @var array<RouteObject> */
@@ -16,7 +18,7 @@ class Router
 
         self::$routesList[] = new RouteObject(
             $route,
-            GET_METHOD,
+            HttpHelper::GET_METHOD,
             $params[0],
             $params[1] ?? null,
             $middlewares
@@ -32,7 +34,7 @@ class Router
 
         self::$routesList[] = new RouteObject(
             $route,
-            POST_METHOD,
+            HttpHelper::POST_METHOD,
             $params[0],
             $params[1] ?? null,
             $middlewares

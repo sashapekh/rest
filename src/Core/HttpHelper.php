@@ -77,6 +77,8 @@ class HttpHelper
         'PATCH',
     ];
 
+    public const GET_METHOD = 'GET';
+    public const POST_METHOD = 'POST';
     public static function getStatusCodes(): array
     {
         return array_keys(self::PHRASES);

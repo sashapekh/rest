@@ -4,13 +4,14 @@ namespace Sashapekh\SimpleRest\Core\Router;
 
 class RouteObject
 {
-    private $route;
+    private string $route;
     private ?array $uriSegments;
     private ?int $segmentCount;
-    private $httpMethod;
+    private string $httpMethod;
     private string $controllerClass;
     private ?string $controllerMethod;
     private ?array $dynamicSegments = [];
+    private array $middlewares = [];
 
     public function __construct(
         string $route,
@@ -25,6 +26,7 @@ class RouteObject
         $this->controllerMethod = $controllerMethod;
         $this->parseSegments();
         $this->assignDynamicSegments();
+        $this->middlewares = $middlewares;
     }
 
     private function parseSegments(): void
@@ -87,7 +89,11 @@ class RouteObject
             foreach ($this->uriSegments as $index => $value) {
                 $result = preg_match('/(?<={)(.*?)(?=})/', $value);
                 if ($result > 0) {
-                    $this->dynamicSegments[$index] = $value;
+                    // here we can create object with position and key properties for the better useful
+                    $this->dynamicSegments[] = [
+                        "position" => $index,
+                        "key" => preg_replace('/\{|\}/', '', $value)
+                    ];
                 }
             }
         }

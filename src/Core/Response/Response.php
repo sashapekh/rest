@@ -12,7 +12,7 @@ class Response implements ResponseInterface
 
     private $statusCode;
     private ?string $reasonPhrase;
-
+    private array $jsonData = [];
     public function __construct(
         int $statusCode = HttpHelper::OK_STATUS
     ) {
@@ -78,4 +78,23 @@ class Response implements ResponseInterface
     {
         return $this->reasonPhrase;
     }
+
+    public function json(array $data): Response|\Psr\Http\Message\MessageInterface
+    {
+        return $this
+            ->withAddedHeader('Content-Type', 'application/json')
+            ->withAddedJson($data);
+    }
+
+    private function withAddedJson(array $data) {
+        $new = clone $this;
+        $new->jsonData = $data;
+        return $new;
+    }
+
+    public function getJsonData(): array
+    {
+        return $this->jsonData;
+    }
+
 }

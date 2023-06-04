@@ -12,6 +12,7 @@ trait MessageTrait
     private array $headers = [];
     private array $headerNames = [];
 
+
     /**
      * @return string
      */
@@ -48,7 +49,7 @@ trait MessageTrait
      */
     public function hasHeader(string $name): bool
     {
-        return isset($this->headers[strtolower($name)]);
+        return isset($this->headers[$name]);
     }
 
     /**
@@ -57,15 +58,13 @@ trait MessageTrait
      */
     public function getHeader(string $name): array
     {
-        $header = strtolower($name);
-
+        $header = array_search($name, $this->headerNames);
         if (!isset($this->headerNames[$header])) {
             return [];
         }
-
         $header = $this->headerNames[$header];
 
-        return $this->headers[$header];
+        return [$name => $this->headers[$header]];
     }
 
     /**
@@ -154,5 +153,14 @@ trait MessageTrait
         $new = $this;
         $new->body = $body;
         return $new;
+    }
+
+    public function isJson(): bool
+    {
+        if ($this->hasHeader('Content-Type')) {
+            $value = $this->getHeader('Content-Type')['Content-Type'] ?? null;
+            return $value === 'application/json';
+        }
+        return false;
     }
 }

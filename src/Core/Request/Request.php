@@ -2,9 +2,8 @@
 
 namespace Sashapekh\SimpleRest\Core\Request;
 
-use Psr\Http\Message\MessageInterface;
+
 use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
 use Sashapekh\SimpleRest\Core\MessageTrait;
 use Sashapekh\SimpleRest\Core\Stream\Stream;
@@ -20,7 +19,6 @@ class Request implements RequestInterface
     private $body = null;
 
     private string $method;
-
     public function __construct()
     {
         $this->protocolVersion = preg_replace('/[^0-9.]/', '', $_SERVER['SERVER_PROTOCOL']);

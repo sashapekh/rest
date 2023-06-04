@@ -2,6 +2,8 @@
 
 namespace Sashapekh\SimpleRest\Controllers;
 
+use Sashapekh\SimpleRest\Core\Request\Request;
+use Sashapekh\SimpleRest\Core\Response\Response;
 use Sashapekh\SimpleRest\Repository\UserRepository;
 
 class UserController
@@ -11,17 +13,16 @@ class UserController
     ) {
     }
 
-    public function all()
+    public function all(Request $request): Response
     {
-        http_response_code(200);
-        header("Content-Type: application/json");
-        echo json_encode($this->userRepository->all());
+        return (new Response())->json(
+            $this->userRepository->all()
+        );
     }
 
-    public function findById(int $id)
+    public function findById(Request $request): Response
     {
-        http_send_status(200);
-        header("Content-Type: application/json");
-        echo json_encode($this->userRepository->find($id));
+
+        return (new Response())->json($this->userRepository->find(1) ?? []);
     }
 }
