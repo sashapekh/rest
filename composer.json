@@ -1,0 +1,22 @@
+{
+  "name": "sashapekh/simple-rest",
+  "autoload": {
+    "psr-4": {
+      "Sashapekh\\SimpleRest\\": "src/",
+      "Sashapekh\\SimpleRest\\Controllers\\": "src/controllers",
+      "Sashapekh\\SimpleRest\\Models\\": "src/Models",
+      "Sashapekh\\SimpleRest\\Middlewares\\": "src/middlewares",
+      "Sashapekh\\SimpleRest\\Core\\": "src/Core"
+    }
+  },
+  "authors": [
+    {
+      "name": "Olexander Pekh",
+      "email": "sashapekh@gmail.com"
+    }
+  ],
+  "require": {
+    "psr/http-message": "*",
+    "psr/http-server-middleware": "^1.0"
+  }
+}
