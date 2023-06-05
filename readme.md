@@ -55,3 +55,18 @@ curl --location 'http://localhost:8080/login' \
 
 - `core/Log/Log::info(\Stringable|string $message, array $context = [])` - інформаційний лог
 - `core/Log/Log::error(\Exception $exception)` - лог про помилку
+
+
+### Дані ресурсу (User наприклад)
+не використував Бази даних або інші сховища.
+Використовував як звичайний массив з даними в середині.
+Щоб вибрати дані використовуємо наступний класс
+`src/Repository/UserRepository.php`
+
+Можна використовувати в інших методах використовуючи Dependency Injection
+```
+public function __construct(
+        private readonly UserRepository $userRepository = new UserRepository()
+    ) {
+    }
+```
