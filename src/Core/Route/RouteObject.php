@@ -1,6 +1,6 @@
 <?php
 
-namespace Sashapekh\SimpleRest\Core\Router;
+namespace Sashapekh\SimpleRest\Core\Route;
 
 class RouteObject
 {

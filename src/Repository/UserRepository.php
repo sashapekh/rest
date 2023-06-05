@@ -9,10 +9,6 @@ class UserRepository
     /** @var array<User> */
     private array $users;
 
-    private $ignore = [
-        'password'
-    ];
-
     public function __construct()
     {
         $this->users = [

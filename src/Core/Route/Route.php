@@ -1,10 +1,11 @@
 <?php
 
-namespace Sashapekh\SimpleRest\Core\Router;
+namespace Sashapekh\SimpleRest\Core\Route;
 
 use Sashapekh\SimpleRest\Core\HttpHelper;
+use Sashapekh\SimpleRest\Core\Route\RouteObject;
 
-class Router
+class Route
 {
     /** @var array<RouteObject> */
     private static array $routesList = [];

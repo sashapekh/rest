@@ -6,6 +6,9 @@ namespace Sashapekh\SimpleRest\Core\Request;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\UriInterface;
 use Sashapekh\SimpleRest\Core\MessageTrait;
+use Sashapekh\SimpleRest\Core\Route\Route;
+use Sashapekh\SimpleRest\Core\Route\RouteObject;
+use Sashapekh\SimpleRest\Core\Route\RouteResolver;
 use Sashapekh\SimpleRest\Core\Stream\Stream;
 use Sashapekh\SimpleRest\Core\Uri\Uri;
 
@@ -20,6 +23,7 @@ class Request implements RequestInterface
 
     private string $method;
 
+    private ?RouteObject $routeObject;
     public function __construct()
     {
         $this->protocolVersion = preg_replace('/[^0-9.]/', '', $_SERVER['SERVER_PROTOCOL']);
@@ -27,6 +31,17 @@ class Request implements RequestInterface
         $this->headerNames = array_keys(getallheaders());
         $this->uri = new Uri();
         $this->method = strtoupper($_SERVER['REQUEST_METHOD']);
+
+        $this->routeObject = RouteResolver::make(
+            Route::getRouteList(),
+            $this->uri,
+            $this->method
+        );
+    }
+
+    public function getRouteObject(): ?RouteObject
+    {
+        return $this->routeObject;
     }
 
     /**
@@ -107,4 +122,14 @@ class Request implements RequestInterface
         }
     }
 
+    public function getDynamicValueByKey(string $name): mixed
+    {
+        $segments = $this->uri->segments();
+        foreach ($this->routeObject->getDynamicSegments() as $key => $value) {
+            if ($name === $value['key']) {
+                return $segments[$value['position']] ?? null;
+            }
+        }
+        return null;
+    }
 }

@@ -1,8 +1,7 @@
 <?php
 
-namespace Sashapekh\SimpleRest\Core\Router;
+namespace Sashapekh\SimpleRest\Core\Route;
 
-use Sashapekh\SimpleRest\Core\Request\Request;
 use Sashapekh\SimpleRest\Core\Uri\Uri;
 
 
@@ -13,13 +12,13 @@ class RouteResolver
      * @param array<RouteObject> $routeList
      * @return RouteObject|null
      */
-    public static function make(array $routeList, Uri $uri, Request $request): ?RouteObject
+    public static function make(array $routeList, Uri $uri, string $method): ?RouteObject
     {
         // dump selection
         $filterRouteList = array_values(
-            array_filter($routeList, function (RouteObject $routeObject) use ($uri, $request) {
+            array_filter($routeList, function (RouteObject $routeObject) use ($uri, $method) {
                 return $uri->getPath() === $routeObject->getRoute()
-                    && $request->getMethod() === $routeObject->getHttpMethod();
+                    &&  $method === $routeObject->getHttpMethod();
             })
         );
 

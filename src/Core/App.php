@@ -8,7 +8,7 @@ use Sashapekh\SimpleRest\Core\Request\Request;
 use Sashapekh\SimpleRest\Core\Request\RequestHandler;
 use Sashapekh\SimpleRest\Core\Request\ServerRequest;
 use Sashapekh\SimpleRest\Core\Response\Response;
-use Sashapekh\SimpleRest\Core\Router\Router;
+use Sashapekh\SimpleRest\Core\Router\Route;
 use Sashapekh\SimpleRest\Core\Router\RouteResolver;
 use Sashapekh\SimpleRest\Core\Uri\Uri;
 use Sashapekh\SimpleRest\Core\Router\RouteObject;
@@ -16,7 +16,6 @@ use Sashapekh\SimpleRest\Core\Router\RouteObject;
 
 class App
 {
-    private ?RouteObject $currentRoute;
     private Uri $uri;
     private RequestInterface $request;
     private ServerRequestInterface $serverRequest;
@@ -26,11 +25,6 @@ class App
     {
         $this->uri = new Uri();
         $this->request = new Request();
-        $this->currentRoute = RouteResolver::make(
-            Router::getRouteList(),
-            $this->uri,
-            $this->request
-        );
         $this->serverRequest = new ServerRequest();
     }
 
@@ -39,10 +33,11 @@ class App
         session_start();
         $this->checkNotFound();
 
-        $class = $this->currentRoute->getControllerClass();
-        $method = $this->currentRoute->getControllerMethod();
-
+        // process middleware and be sure we can pass to next
         $this->middlewareHandle();
+
+        $class = $this->request->getRouteObject()?->getControllerClass();
+        $method = $this->request->getRouteObject()?->getControllerMethod();
 
         $response = (new $class)->{$method}(
             $this->request
@@ -63,43 +58,34 @@ class App
 
     private function checkNotFound(): void
     {
-        if (empty($this->currentRoute)) {
+        if (empty($this->request->getRouteObject())) {
             http_response_code(HttpStatusCodes::NOT_FOUND_STATUS);
-            if ($this->request->isJson()) {
-                echo json_encode(
-                    [
-                        'code'    => HttpStatusCodes::NOT_FOUND_STATUS,
-                        'message' => HttpHelper::getPhraseByStatusCode(HttpStatusCodes::NOT_FOUND_STATUS)
-                    ]
-                );
-                exit();
-            } else {
-                echo sprintf(
-                    "<h1>%s</h1>",
-                    HttpHelper::getPhraseByStatusCode(HttpStatusCodes::NOT_FOUND_STATUS)
-                );
-                exit();
-            }
+
+            echo json_encode(
+                [
+                    'code'    => HttpStatusCodes::NOT_FOUND_STATUS,
+                    'message' => HttpHelper::getPhraseByStatusCode(HttpStatusCodes::NOT_FOUND_STATUS)
+                ]
+            );
+            exit();
         }
     }
 
     private function middlewareHandle(): void
     {
-        $response = null;
-
-        foreach ($this->currentRoute->getMiddlewares() as $middleware) {
+        $middlewares = $this->request->getRouteObject()?->getMiddlewares();
+        if (!$middlewares) {
+            return;
+        }
+        foreach ($middlewares as $middleware) {
             $class = $middleware;
             /** @var Response $response */
             $response = (new $class())
                 ->process($this->serverRequest, new RequestHandler());
-            if ($response->getStatusCode() !== HttpStatusCodes::OK_STATUS) {
-                break;
-            }
-            $response = null;
-        }
 
-        if ($response) {
-            $this->resolveResponse($response);
+            if ($response->getStatusCode() !== HttpHelper::OK_STATUS) {
+                $this->resolveResponse($response);
+            }
         }
     }
 }

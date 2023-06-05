@@ -22,6 +22,6 @@ class UserController
 
     public function findById(Request $request): Response
     {
-        return (new Response())->json($this->userRepository->find(1) ?? []);
+        return (new Response())->json($this->userRepository->find($request->getDynamicValueByKey('id')) ?? []);
     }
 }

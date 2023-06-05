@@ -24,6 +24,7 @@ class AuthUserMiddleware implements MiddlewareInterface
                 return new Response();
             }
         }
+
         return (new Response(HttpStatusCodes::FORBIDDEN_STATUS))->json([
             'message' => HttpHelper::getPhraseByStatusCode(HttpStatusCodes::FORBIDDEN_STATUS)
         ]);

@@ -201,4 +201,9 @@ class Uri implements UriInterface
     {
         return $_SERVER[$key] ?? '';
     }
+
+    public function segments(): ?array
+    {
+        return parseSegment($this->getPath());
+    }
 }
