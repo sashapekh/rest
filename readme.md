@@ -58,12 +58,12 @@ curl --location 'http://localhost:8080/login' \
 
 
 ### Дані ресурсу (User наприклад)
-не використував Бази даних або інші сховища.
+Не застосовував бази даних або інші сховища.
 Використовував як звичайний массив з даними в середині.
-Щоб вибрати дані використовуємо наступний класс
+Щоб вибрати дані визиваємо наступний класс
 `src/Repository/UserRepository.php`
 
-Можна використовувати в інших методах використовуючи Dependency Injection
+Можна застосовуючи в інших методах за допомогою Dependency Injection
 ```
 public function __construct(
         private readonly UserRepository $userRepository = new UserRepository()
