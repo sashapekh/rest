@@ -19,6 +19,8 @@ class ServerRequest implements ServerRequestInterface
     {
         $this->method = strtoupper($_SERVER['REQUEST_METHOD']);
         $this->uri = new Uri();
+        $this->headers = getallheaders();
+        $this->headerNames = array_keys(getallheaders());
     }
 
     use MessageTrait;

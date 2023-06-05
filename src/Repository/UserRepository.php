@@ -67,4 +67,20 @@ class UserRepository
         return null;
     }
 
+    public function checkToken(string $token): ?User
+    {
+        try {
+            $data = explode(":", base64_decode($token));
+            $email = $data[0] ?? null;
+            $passHash = $data[1] ?? null;
+            $result = array_values(
+                array_filter($this->users, function ($item) use ($email, $passHash) {
+                    return $item->email === $email && $passHash === $item->getPassword();
+                })
+            );
+            return $result[0] ?? null;
+        } catch (\Exception $exception) {
+            return null;
+        }
+    }
 }
