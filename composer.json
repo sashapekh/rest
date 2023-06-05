@@ -6,7 +6,7 @@
       "Sashapekh\\SimpleRest\\Controllers\\": "src/controllers",
       "Sashapekh\\SimpleRest\\Models\\": "src/Models",
       "Sashapekh\\SimpleRest\\Middlewares\\": "src/middlewares",
-      "Sashapekh\\SimpleRest\\Core\\": "src/Core"
+      "Sashapekh\\SimpleRest\\Core\\": "core"
     },
     "files": [
       "src/helper.php"

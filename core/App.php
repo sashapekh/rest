@@ -52,6 +52,8 @@ class App
     private function resolveResponse(Response $response): void
     {
         http_response_code($response->getStatusCode());
+        // hard setup content-type
+        header('Content-Type: application/json; charset=utf-8');
         echo json_encode($response->getJsonData());
         exit();
     }

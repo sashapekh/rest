@@ -1,6 +1,6 @@
 <?php
 
-namespace Sashapekh\SimpleRest\Core;
+namespace Sashapekh\Core;
 
 class Singleton
 {
