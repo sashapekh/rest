@@ -20,6 +20,7 @@
   ],
   "require": {
     "psr/http-message": "*",
-    "psr/http-server-middleware": "^1.0"
+    "psr/http-server-middleware": "^1.0",
+    "psr/log": "^3.0"
   }
 }
