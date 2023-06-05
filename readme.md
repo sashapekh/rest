@@ -1,7 +1,8 @@
 # Простий rest (php 8)
 
 ### Щоб підняти сервер, виконуємо наступну команду
-`cd public && php -S localhost:8080`
+- `composer install`
+- `cd public && php -S localhost:8080`
 
 ### Реалізовані наступний функціонал
 > **Нотатка**
